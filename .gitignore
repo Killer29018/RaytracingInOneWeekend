@@ -1,0 +1,5 @@
+*.ppm
+build/**
+.vscode/**
+bin/**
+**.bat

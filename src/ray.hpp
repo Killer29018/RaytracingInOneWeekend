@@ -9,14 +9,13 @@ public:
     Point3 orig;
     Vec3 dir;
 public:
-    Ray() {};
-    Ray(const Point3& origin, const Point3& direction)
-        : orig(origin), dir(direction) {}
+    Ray();
+    Ray(const Point3& origin, const Point3& direction);
 
-    Point3 origin() const { return orig; }
-    Vec3 direction() const { return dir; }
+    Point3 Origin() const;
+    Vec3 Direction() const;
 
-    Point3 at(double t) const { return orig + t * dir; }
+    Point3 At(double t) const;
 };
 
 #endif

@@ -9,18 +9,18 @@ class sphere : public hittable
 {
 public:
     Point3 center;
-    std::shared_ptr<material> matPtr;
+    std::shared_ptr<Material> matPtr;
     double radius;
 public:
     sphere();
-    sphere(Point3 cen, double r, std::shared_ptr<material> m) : center(cen), radius(r), matPtr(m) { }
+    sphere(Point3 cen, double r, std::shared_ptr<Material> m) : center(cen), radius(r), matPtr(m) { }
 
     virtual bool hit(const Ray& r, double tMin, double tMax, hitRecord& rec) const
     {
-        Vec3 oc = r.origin() - center;
+        Vec3 oc = r.Origin() - center;
 
-        double a = r.direction().LengthSquared();
-        double b = Vec3::Dot(oc, r.direction());
+        double a = r.Direction().LengthSquared();
+        double b = Vec3::Dot(oc, r.Direction());
         double c = oc.LengthSquared() - radius*radius;
 
         double discriminant = b*b - a*c;
@@ -36,7 +36,7 @@ public:
         }
 
         rec.t = root;
-        rec.point = r.at(rec.t);
+        rec.point = r.At(rec.t);
         Vec3 outwardNormal = (rec.point - center) / radius;
         rec.setFaceNormal(r, outwardNormal);
         rec.matPtr = matPtr;

@@ -4,19 +4,19 @@
 #include "Ray.hpp"
 #include "General.hpp"
 
-struct material;
+struct Material;
 
 struct hitRecord
 {
     Point3 point;
     Vec3 normal;
-    std::shared_ptr<material> matPtr;
+    std::shared_ptr<Material> matPtr;
     double t;
     bool frontFace;
 
     inline void setFaceNormal(const Ray& r, const Vec3& outwardNormal)
     {
-        frontFace = Vec3::Dot(r.direction(), outwardNormal) < 0;
+        frontFace = Vec3::Dot(r.Direction(), outwardNormal) < 0;
         normal = frontFace ? outwardNormal : -outwardNormal;
     }
 };

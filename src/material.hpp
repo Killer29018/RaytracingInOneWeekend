@@ -1,8 +1,8 @@
 #ifndef MATERIAL_HPP
 #define MATERIAL_HPP
 
-#include "general.hpp"
-#include "hittable.hpp"
+#include "General.hpp"
+#include "Hittable.hpp"
 
 struct hitRecord;
 
@@ -21,9 +21,9 @@ public:
 
     virtual bool scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const override
     {
-        vec3 scatterDirection = rec.normal + randomUnitVector();
+        Vec3 scatterDirection = rec.normal + Vec3::RandomUnitVector();
 
-        if (scatterDirection.nearZero())
+        if (scatterDirection.NearZero())
             scatterDirection = rec.normal;
 
         scattered = Ray(rec.point, scatterDirection);
@@ -42,10 +42,10 @@ public:
 
     virtual bool scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const override
     {
-        vec3 reflected = reflect(unitVector(r.direction()), rec.normal);
-        scattered = Ray(rec.point, reflected + fuzz * randomInUnitSphere());
+        Vec3 reflected = Vec3::Reflect(Vec3::UnitVector(r.direction()), rec.normal);
+        scattered = Ray(rec.point, reflected + fuzz * Vec3::RandomInUnitSphere());
         attenuation = albedo;
-        return (dot(scattered.direction(), rec.normal) > 0);
+        return (Vec3::Dot(scattered.direction(), rec.normal) > 0);
     }
 };
 
@@ -61,17 +61,17 @@ public:
         attenuation = Colour(1.0, 1.0, 1.0);
         double refractionRatio = rec.frontFace ? (1.0 / ir) : ir;
 
-        vec3 unitDirection = unitVector(r.direction());
-        double cosTheta = fmin(dot(-unitDirection, rec.normal), 1.0);
+        Vec3 unitDirection = Vec3::UnitVector(r.direction());
+        double cosTheta = fmin(Vec3::Dot(-unitDirection, rec.normal), 1.0);
         double sinTheta = sqrt(1.0 - cosTheta*cosTheta);
 
         bool cannotRefract = refractionRatio * sinTheta > 1.0;
-        vec3 direction;
+        Vec3 direction;
 
-        if (cannotRefract || reflectance(cosTheta, refractionRatio) > randomDouble())
-            direction = reflect(unitDirection, rec.normal);
+        if (cannotRefract || reflectance(cosTheta, refractionRatio) > RandomDouble())
+            direction = Vec3::Reflect(unitDirection, rec.normal);
         else
-            direction = refract(unitDirection, rec.normal, refractionRatio);
+            direction = Vec3::Refract(unitDirection, rec.normal, refractionRatio);
 
         scattered = Ray(rec.point, direction); 
         return true;

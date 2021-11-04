@@ -1,9 +1,9 @@
 #ifndef SPHERE_HPP
 #define SPHERE_HPP
 
-#include "hittable.hpp"
-#include "ray.hpp"
-#include "vec3.hpp"
+#include "Hittable.hpp"
+#include "Ray.hpp"
+#include "Vec3.hpp"
 
 class sphere : public hittable
 {
@@ -17,11 +17,11 @@ public:
 
     virtual bool hit(const Ray& r, double tMin, double tMax, hitRecord& rec) const
     {
-        vec3 oc = r.origin() - center;
+        Vec3 oc = r.origin() - center;
 
-        double a = r.direction().lengthSquared();
-        double b = dot(oc, r.direction());
-        double c = oc.lengthSquared() - radius*radius;
+        double a = r.direction().LengthSquared();
+        double b = Vec3::Dot(oc, r.direction());
+        double c = oc.LengthSquared() - radius*radius;
 
         double discriminant = b*b - a*c;
         if (discriminant < 0) return false;
@@ -37,7 +37,7 @@ public:
 
         rec.t = root;
         rec.point = r.at(rec.t);
-        vec3 outwardNormal = (rec.point - center) / radius;
+        Vec3 outwardNormal = (rec.point - center) / radius;
         rec.setFaceNormal(r, outwardNormal);
         rec.matPtr = matPtr;
 

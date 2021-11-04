@@ -1,8 +1,8 @@
 #ifndef COLOUR_HPP
 #define COLOUR_HPP
 
-#include "vec3.hpp"
-#include "general.hpp"
+#include "Vec3.hpp"
+#include "General.hpp"
 
 #include <iostream>
 
@@ -24,9 +24,9 @@ void writeColour(std::ostream& out, Colour pixelColour, int samplesPerPixel)
     g = std::sqrt(scale * g);
     b = std::sqrt(scale * b);
 
-    out << (int)(256 * clamp(r, 0.0, 0.999)) << " "
-        << (int)(256 * clamp(g, 0.0, 0.999)) << " "
-        << (int)(256 * clamp(b, 0.0, 0.999)) << "\n";
+    out << (int)(256 * Clamp(r, 0.0, 0.999)) << " "
+        << (int)(256 * Clamp(g, 0.0, 0.999)) << " "
+        << (int)(256 * Clamp(b, 0.0, 0.999)) << "\n";
 }
 
 #endif

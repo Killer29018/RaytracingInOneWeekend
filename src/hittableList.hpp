@@ -1,7 +1,7 @@
 #ifndef HITTABLE_LIST_HPP
 #define HITTABLE_LIST_HPP
 
-#include "hittable.hpp"
+#include "Hittable.hpp"
 
 #include <memory>
 #include <vector>

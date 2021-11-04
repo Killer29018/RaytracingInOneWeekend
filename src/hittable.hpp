@@ -1,22 +1,22 @@
 #ifndef HITTABLE_HPP
 #define HITTABLE_HPP
 
-#include "ray.hpp"
-#include "general.hpp"
+#include "Ray.hpp"
+#include "General.hpp"
 
 struct material;
 
 struct hitRecord
 {
     Point3 point;
-    vec3 normal;
+    Vec3 normal;
     std::shared_ptr<material> matPtr;
     double t;
     bool frontFace;
 
-    inline void setFaceNormal(const Ray& r, const vec3& outwardNormal)
+    inline void setFaceNormal(const Ray& r, const Vec3& outwardNormal)
     {
-        frontFace = dot(r.direction(), outwardNormal) < 0;
+        frontFace = Vec3::Dot(r.direction(), outwardNormal) < 0;
         normal = frontFace ? outwardNormal : -outwardNormal;
     }
 };

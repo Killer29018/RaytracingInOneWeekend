@@ -6,14 +6,14 @@
 
 #include <iostream>
 
-void writeColour(std::ostream& out, Colour pixelColour)
+void WriteColour(std::ostream& out, Colour pixelColour)
 {
     out << static_cast<int>(255.999 * pixelColour.x()) << " "
     << static_cast<int>(255.999 * pixelColour.y()) << " "
     << static_cast<int>(255.999 * pixelColour.z()) << "\n";
 }
 
-void writeColour(std::ostream& out, Colour pixelColour, int samplesPerPixel)
+void WriteColour(std::ostream& out, Colour pixelColour, int samplesPerPixel)
 {
     double r = pixelColour.x();
     double g = pixelColour.y();

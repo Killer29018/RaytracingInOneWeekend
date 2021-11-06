@@ -12,19 +12,19 @@
 
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html
 
-Colour rayColour(const Ray& r, const hittable& world, int depth);
-hittableList randomScene();
-hittableList basicScene();
+Colour rayColour(const Ray& r, const Hittable& world, int depth);
+HittableList randomScene();
+HittableList basicScene();
 
 int main()
 {
     const double aspectRatio = 3.0 / 2.0;
     const int imageWidth = 400;
     const int imageHeight = (int)(imageWidth / aspectRatio);
-    const int samplesPerPixel = 50;
+    const int samplesPerPixel = 100;
     const int maxDepth = 50;
 
-    hittableList world = basicScene();
+    HittableList world = basicScene();
 
     Point3 lookFrom(10, 2, 10);
     Point3 lookAt(0, 0, 0);
@@ -48,7 +48,7 @@ int main()
                 Ray r = cam.GetRay(u, v);
                 pixelColour += rayColour(r, world, maxDepth);
             }
-            writeColour(std::cout, pixelColour, samplesPerPixel);
+            WriteColour(std::cout, pixelColour, samplesPerPixel);
         }
     }
     std::cerr << "\nDone\n";
@@ -56,14 +56,14 @@ int main()
     return 0;
 }
 
-Colour rayColour (const Ray& r, const hittable& world, int depth)
+Colour rayColour (const Ray& r, const Hittable& world, int depth)
 {
-    hitRecord rec;
+    HitRecord rec;
 
     if (depth <= 0)
         return Colour(0, 0, 0);
 
-    if (world.hit(r, 0.001, infinity, rec))
+    if (world.Hit(r, 0.001, infinity, rec))
     {
         Ray scattered;
         Colour attenuation;
@@ -77,12 +77,12 @@ Colour rayColour (const Ray& r, const hittable& world, int depth)
     return (1.0 - t) * Colour(1, 1, 1) + t * Colour(0.5, 0.7, 1.0);
 }
 
-hittableList randomScene()
+HittableList randomScene()
 {
-    hittableList world;
+    HittableList world;
 
     auto groundMaterial = std::make_shared<Lambertian>(Colour(0.5, 0.5, 0.5));
-    world.add(std::make_shared<sphere>(Point3(0, -1000.0, 0), 1000, groundMaterial));
+    world.Add(std::make_shared<Sphere>(Point3(0, -1000.0, 0), 1000, groundMaterial));
 
     for (int a = -11; a < 11; a++)
     {
@@ -99,51 +99,51 @@ hittableList randomScene()
                 {
                     Colour albedo = Colour::Random() * Colour::Random();
                     sphereMaterial = std::make_shared<Lambertian>(albedo);
-                    world.add(std::make_shared<sphere>(center, 0.2, sphereMaterial));
+                    world.Add(std::make_shared<Sphere>(center, 0.2, sphereMaterial));
                 }
                 else if (chooseMat < 0.95) // Metal
                 {
                     Vec3 albedo = Colour::Random(0.5, 1);
                     double fuzz = RandomDouble(0, 0.5);
                     sphereMaterial = std::make_shared<Metal>(albedo, fuzz);
-                    world.add(std::make_shared<sphere>(center, 0.2, sphereMaterial));
+                    world.Add(std::make_shared<Sphere>(center, 0.2, sphereMaterial));
                 }
                 else // Glass
                 {
                     sphereMaterial = std::make_shared<Dielectric>(1.5);
-                    world.add(std::make_shared<sphere>(center, 0.2, sphereMaterial));
+                    world.Add(std::make_shared<Sphere>(center, 0.2, sphereMaterial));
                 }
             }
         }
     }
 
     auto material1 = std::make_shared<Dielectric>(1.5);
-    world.add(std::make_shared<sphere>(Point3(0, 1, 0), 1.0, material1));
+    world.Add(std::make_shared<Sphere>(Point3(0, 1, 0), 1.0, material1));
 
     auto material2 = std::make_shared<Lambertian>(Colour(0.4, 0.2, 0.1));
-    world.add(std::make_shared<sphere>(Point3(-4, 1, 0), 1.0, material2));
+    world.Add(std::make_shared<Sphere>(Point3(-4, 1, 0), 1.0, material2));
 
     auto material3 = std::make_shared<Metal>(Colour(0.7, 0.6, 0.5), 0.0);
-    world.add(std::make_shared<sphere>(Point3(4, 1, 0), 1.0, material3));
+    world.Add(std::make_shared<Sphere>(Point3(4, 1, 0), 1.0, material3));
 
     return world;
 }
 
-hittableList basicScene()
+HittableList basicScene()
 {
-    hittableList world;
+    HittableList world;
 
     auto groundMaterial = std::make_shared<Lambertian>(Colour(0.5, 0.5, 0.5));
-    world.add(std::make_shared<sphere>(Point3(0, -1000.0, 0), 1000, groundMaterial));
+    world.Add(std::make_shared<Sphere>(Point3(0, -1000.0, 0), 1000, groundMaterial));
 
     auto material1 = std::make_shared<Dielectric>(1.5);
-    world.add(std::make_shared<sphere>(Point3(0, 1, 0), 1.0, material1));
+    world.Add(std::make_shared<Sphere>(Point3(0, 1, 0), 1.0, material1));
 
     auto material2 = std::make_shared<Lambertian>(Colour(0.4, 0.2, 0.1));
-    world.add(std::make_shared<sphere>(Point3(-4, 1, 0), 1.0, material2));
+    world.Add(std::make_shared<Sphere>(Point3(-4, 1, 0), 1.0, material2));
 
     auto material3 = std::make_shared<Metal>(Colour(0.7, 0.6, 0.5), 0.0);
-    world.add(std::make_shared<sphere>(Point3(4, 1, 0), 1.0, material3));
+    world.Add(std::make_shared<Sphere>(Point3(4, 1, 0), 1.0, material3));
 
     return world;
 }

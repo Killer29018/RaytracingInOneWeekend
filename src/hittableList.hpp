@@ -6,37 +6,18 @@
 #include <memory>
 #include <vector>
 
-class hittableList : public hittable
+class HittableList : public Hittable
 {
 public:
-    std::vector<std::shared_ptr<hittable>> objects;
+    std::vector<std::shared_ptr<Hittable>> objects;
 public:
-    hittableList() {}
-    hittableList(std::shared_ptr<hittable> object) { add(object); }
+    HittableList();
+    HittableList(std::shared_ptr<Hittable> object);
 
-    void clear() { objects.clear(); }
-    void add(std::shared_ptr<hittable> object) { objects.push_back(object); }
+    void Clear();
+    void Add(std::shared_ptr<Hittable> object);
 
-    virtual bool hit(const Ray& r, double tMin, double tMax, hitRecord& rec) const override;
+    virtual bool Hit(const Ray& r, double tMin, double tMax, HitRecord& rec) const override;
 };
-
-bool hittableList::hit(const Ray& r, double tMin, double tMax, hitRecord& rec) const 
-{
-    hitRecord tempRec;
-    bool hitAnything = false;
-    double closestSoFar = tMax;
-
-    for (const auto& object: objects)
-    {
-        if (object->hit(r, tMin, closestSoFar, tempRec))
-        {
-            hitAnything = true;
-            closestSoFar = tempRec.t;
-            rec = tempRec;
-        }
-    }
-
-    return hitAnything;
-}
 
 #endif

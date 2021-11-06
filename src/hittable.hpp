@@ -6,7 +6,7 @@
 
 struct Material;
 
-struct hitRecord
+struct HitRecord
 {
     Point3 point;
     Vec3 normal;
@@ -14,17 +14,17 @@ struct hitRecord
     double t;
     bool frontFace;
 
-    inline void setFaceNormal(const Ray& r, const Vec3& outwardNormal)
+    inline void SetFaceNormal(const Ray& r, const Vec3& outwardNormal)
     {
         frontFace = Vec3::Dot(r.Direction(), outwardNormal) < 0;
         normal = frontFace ? outwardNormal : -outwardNormal;
     }
 };
 
-class hittable
+class Hittable
 {
 public:
-    virtual bool hit(const Ray& r, double tMin, double tMax, hitRecord& rec) const = 0;
+    virtual bool Hit(const Ray& r, double tMin, double tMax, HitRecord& rec) const = 0;
 };
 
 #endif

@@ -4,7 +4,7 @@ Lambertian::Lambertian(const Colour& a)
     : albedo(a) {}
 
 
-bool Lambertian::Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const
+bool Lambertian::Scatter(const Ray& r, const HitRecord& rec, Colour& attenuation, Ray& scattered) const
 {
     Vec3 scatterDirection = rec.normal + Vec3::RandomUnitVector();
 
@@ -20,7 +20,7 @@ Metal::Metal(const Colour& a, double f)
     : albedo(a), fuzz(f < 1 ? f : 1) {}
 
 
-bool Metal::Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const
+bool Metal::Scatter(const Ray& r, const HitRecord& rec, Colour& attenuation, Ray& scattered) const
 {
     Vec3 reflected = Vec3::Reflect(Vec3::UnitVector(r.Direction()), rec.normal);
     scattered = Ray(rec.point, reflected + fuzz * Vec3::RandomInUnitSphere());
@@ -31,7 +31,7 @@ bool Metal::Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray
 
 Dielectric::Dielectric(double indexOfRefraction) : ir(indexOfRefraction) {}
 
-bool Dielectric::Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const
+bool Dielectric::Scatter(const Ray& r, const HitRecord& rec, Colour& attenuation, Ray& scattered) const
 {
     attenuation = Colour(1.0, 1.0, 1.0);
     double refractionRatio = rec.frontFace ? (1.0 / ir) : ir;

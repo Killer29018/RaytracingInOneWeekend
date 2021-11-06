@@ -4,12 +4,12 @@
 #include "General.hpp"
 #include "Hittable.hpp"
 
-struct hitRecord;
+struct HitRecord;
 
 class Material
 {
 public:
-    virtual bool Scatter(const Ray& rIn, const hitRecord& rec, Colour& attenuation, Ray& scattered) const = 0;
+    virtual bool Scatter(const Ray& rIn, const HitRecord& rec, Colour& attenuation, Ray& scattered) const = 0;
 };
 
 class Lambertian : public Material
@@ -19,7 +19,7 @@ public:
 public:
     Lambertian(const Colour& a);
 
-    virtual bool Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& r, const HitRecord& rec, Colour& attenuation, Ray& scattered) const override;
 };
 
 class Metal : public Material
@@ -30,7 +30,7 @@ public:
 public:
     Metal(const Colour& a, double f);
 
-    virtual bool Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& r, const HitRecord& rec, Colour& attenuation, Ray& scattered) const override;
 };
 
 class Dielectric : public Material
@@ -40,7 +40,7 @@ public:
 public:
     Dielectric(double indexOfRefraction);
 
-    virtual bool Scatter(const Ray& r, const hitRecord& rec, Colour& attenuation, Ray& scattered) const override;
+    virtual bool Scatter(const Ray& r, const HitRecord& rec, Colour& attenuation, Ray& scattered) const override;
 private:
     static double Reflectance(double cosine, double refIdx);
 };

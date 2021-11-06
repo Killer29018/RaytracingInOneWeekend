@@ -7,11 +7,15 @@ Sphere::Sphere(Point3 center, double radius, std::shared_ptr<Material> material)
 
 bool Sphere::Hit(const Ray& ray, double tMin, double tMax, HitRecord& rec) const
 {
-    Vec3 oc = ray.Origin() - center;
+    Vec3 A = ray.Origin();
+    Vec3 B = ray.Direction();
 
-    double a = ray.Direction().LengthSquared();
-    double b = Vec3::Dot(oc, ray.Direction());
-    double c = oc.LengthSquared() - radius*radius;
+    Vec3 A_C = A - center;
+
+    // b is half it's intended value which leads to reduced calculation cost
+    double a = Vec3::Dot(B, B);
+    double b = Vec3::Dot(B, A_C);
+    double c = Vec3::Dot(A_C, A_C) - radius*radius;
 
     double discriminant = b*b - a*c;
     if (discriminant < 0) return false;

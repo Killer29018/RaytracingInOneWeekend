@@ -17,13 +17,13 @@ Vec3 Vec3::Random(double min, double max)
     return Vec3(RandomDouble(min, max), RandomDouble(min, max), RandomDouble(min, max));
 }
 
-bool Vec3::NearZero() const 
+bool Vec3::NearZero() const
 {
     const double s = 1e-8;
     return (fabs(e[0]) < s) && (fabs(e[1]) < s) && (fabs(e[2]) < s);
 }
 
-double Vec3::Length() const 
+double Vec3::Length() const
 {
     return std::sqrt(LengthSquared());
 }
@@ -36,7 +36,7 @@ double Vec3::LengthSquared() const
 double Vec3::Dot(const Vec3& v, const Vec3& u)
 {
     return v.e[0] * u.e[0] +
-        v.e[1] * u.e[1] + 
+        v.e[1] * u.e[1] +
         v.e[2] * u.e[2];
 }
 

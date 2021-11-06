@@ -1,4 +1,4 @@
-#include "Sphere.hpp"
+#include "Objects.hpp"
 
 Sphere::Sphere() {}
 
@@ -21,17 +21,39 @@ bool Sphere::Hit(const Ray& ray, double tMin, double tMax, HitRecord& rec) const
     if (discriminant < 0) return false;
     double sqrtD = std::sqrt(discriminant);
 
-    double root = (-b - sqrtD) / a;
-    if (root < tMin || tMax < root)
+    double tRoot = (-b - sqrtD) / a;
+    if (tRoot < tMin || tRoot > tMax)
     {
-        root = (-b + sqrtD) / a;
-        if (root < tMin || tMax < root)
+        tRoot = (-b + sqrtD) / a;
+        if (tRoot < tMin || tRoot > tMax)
             return false;
     }
 
-    rec.t = root;
+    rec.t = tRoot;
     rec.point = ray.At(rec.t);
     Vec3 outwardNormal = (rec.point - center) / radius;
+    rec.SetFaceNormal(ray, outwardNormal);
+    rec.matPtr = matPtr;
+
+    return true;
+}
+
+
+Plane::Plane() {}
+
+Plane::Plane(Point3 orig, Vec3 normal, std::shared_ptr<Material> material)
+    : orig(orig), normal(normal), matPtr(material) {}
+
+bool Plane::Hit(const Ray& ray, double tMin, double tMax, HitRecord& rec) const
+{
+    double t = Vec3::Dot(-(normal), ray.Origin() - orig) / Vec3::Dot(normal, ray.Direction());
+
+    if (t < tMin || t > tMax)
+        return false;
+
+    rec.t = t;
+    rec.point = ray.At(rec.t);
+    Vec3 outwardNormal = normal;
     rec.SetFaceNormal(ray, outwardNormal);
     rec.matPtr = matPtr;
 

@@ -8,20 +8,22 @@
 #include "Colour.hpp"
 #include "HittableList.hpp"
 #include "Material.hpp"
-#include "Sphere.hpp"
+#include "Objects.hpp"
 
 // https://raytracing.github.io/books/RayTracingInOneWeekend.html
 
-Colour rayColour(const Ray& r, const Hittable& world, int depth);
+Colour rayColour(const Ray& r, const HittableList& world, int depth);
 HittableList randomScene();
 HittableList basicScene();
+HittableList planeScene();
+
 
 int main()
 {
     const double aspectRatio = 3.0 / 2.0;
     const int imageWidth = 400;
     const int imageHeight = (int)(imageWidth / aspectRatio);
-    const int samplesPerPixel = 100;
+    const int samplesPerPixel = 50;
     const int maxDepth = 50;
 
     HittableList world = basicScene();
@@ -56,14 +58,14 @@ int main()
     return 0;
 }
 
-Colour rayColour (const Ray& r, const Hittable& world, int depth)
+Colour rayColour (const Ray& r, const HittableList& world, int depth)
 {
     HitRecord rec;
 
     if (depth <= 0)
         return Colour(0, 0, 0);
 
-    if (world.Hit(r, 0.001, infinity, rec))
+    if (world.Hit(r, 0.001, 10, rec))
     {
         Ray scattered;
         Colour attenuation;
@@ -134,7 +136,7 @@ HittableList basicScene()
     HittableList world;
 
     auto groundMaterial = std::make_shared<Lambertian>(Colour(0.5, 0.5, 0.5));
-    world.Add(std::make_shared<Sphere>(Point3(0, -1000.0, 0), 1000, groundMaterial));
+    world.Add(std::make_shared<Plane>(Point3(0, 0, 0), Vec3(0, 1, 0), groundMaterial));
 
     auto material1 = std::make_shared<Dielectric>(1.5);
     world.Add(std::make_shared<Sphere>(Point3(0, 1, 0), 1.0, material1));
@@ -144,6 +146,16 @@ HittableList basicScene()
 
     auto material3 = std::make_shared<Metal>(Colour(0.7, 0.6, 0.5), 0.0);
     world.Add(std::make_shared<Sphere>(Point3(4, 1, 0), 1.0, material3));
+
+    return world;
+}
+
+HittableList planeScene()
+{
+    HittableList world;
+    auto groundMaterial = std::make_shared<Lambertian>(Colour(0.5, 0.5, 0.5));
+    world.Add(std::make_shared<Plane>(Point3(0, 0, 0), Vec3(0, 1, 0), groundMaterial));
+    // world.Add(std::make_shared<Plane>(Point3(1, 0, 0), Vec3(-1, 0, 0), groundMaterial));
 
     return world;
 }
